@@ -9,18 +9,22 @@ import DurationParetoChart from './components/DurationParetoChart';
 import DataTable from './components/DataTable';
 import ExtractionCodeModal from './components/ExtractionCodeModal';
 
-const EXTRACTION_PROMPT = `I have a CSV file containing project delivery data. I need you to parse this CSV and output a single JSON object that strictly follows the structure below so I can update a React dashboard.
+const EXTRACTION_PROMPT = `I have a CSV file containing project delivery data. Please parse this CSV and output a single JSON object that strictly follows the structure below so I can update a React dashboard.
 
 **Mapping Rules:**
 
-1. **Categories**: Extract the "Ring" column values into a simple string array.
+1. **Metadata**: 
+   - Set "title" to "FDT Status Distribution"
+   - Set "chartType" to "bar"
 
-2. **Series**: Create exactly 3 series objects based on these numeric columns:
+2. **Categories**: Extract the "Ring" column values into a simple string array (preserve the order from the CSV).
+
+3. **Series**: Create exactly 3 series objects based on these numeric columns:
    - Name: "Plan FDT" -> Map data from the "Plan FDT" column. (Color: #3B82F6)
    - Name: "Pending FDT" -> Map data from the "Pending FDT" column. (Color: #F59E0B)
    - Name: "No. of FDTs Delivered" -> Map data from the "No. of FDTs Delivered" column. (Color: #16A34A)
 
-3. **Table Data**: Create an array of objects where each object represents a row in the CSV, mapped to these exact camelCase keys:
+4. **Table Data**: Create an array of objects where each object represents a row in the CSV, mapped to these exact camelCase keys:
    - \`ring\` (from "Ring")
    - \`planFdt\` (from "Plan FDT", number)
    - \`pendingFdt\` (from "Pending FDT", number)
@@ -35,6 +39,8 @@ const EXTRACTION_PROMPT = `I have a CSV file containing project delivery data. I
 **Required JSON Output Format:**
 
 {
+  "title": "FDT Status Distribution",
+  "chartType": "bar",
   "categories": ["Ring 1", "Ring 2", ...],
   "series": [
     { "name": "Plan FDT", "color": "#3B82F6", "data": [15, 10, ...] },
