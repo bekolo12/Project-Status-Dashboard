@@ -1,0 +1,5 @@
+{
+  "name": "Project Status Dashboard",
+  "description": "A comprehensive dashboard for visualizing project statuses, including delivery rates, risks, and delays across different categories.",
+  "requestFramePermissions": []
+}
