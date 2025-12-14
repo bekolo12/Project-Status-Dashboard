@@ -6,20 +6,15 @@ interface DataTableProps {
 }
 
 const DataTable: React.FC<DataTableProps> = ({ data }) => {
-  // Helper to get series data by name
-  const getSeriesData = (name: string) => data.series.find(s => s.name === name)?.data || [];
-
-  const atRiskData = getSeriesData("At Risk");
-  const delayedData = getSeriesData("Delayed");
-  const deliveredData = getSeriesData("Delivered");
-  const pendingData = getSeriesData("Pending");
-
-  // Calculate totals for footer
-  const totalAtRisk = atRiskData.reduce((a, b) => a + b, 0);
-  const totalDelayed = delayedData.reduce((a, b) => a + b, 0);
-  const totalDelivered = deliveredData.reduce((a, b) => a + b, 0);
-  const totalPending = pendingData.reduce((a, b) => a + b, 0);
-  const grandTotal = totalAtRisk + totalDelayed + totalDelivered + totalPending;
+  const getStatusStyle = (status: string) => {
+    switch (status) {
+      case 'Delivered': return 'bg-green-100 text-green-800';
+      case 'Delayed': return 'bg-orange-100 text-orange-800';
+      case 'At Risk': return 'bg-red-100 text-red-800';
+      case 'Pending': return 'bg-gray-200 text-gray-800';
+      default: return 'bg-gray-100 text-gray-800';
+    }
+  };
 
   return (
     <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
@@ -30,67 +25,37 @@ const DataTable: React.FC<DataTableProps> = ({ data }) => {
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Category</th>
-              <th className="px-6 py-3 text-center text-xs font-semibold text-gray-500 uppercase tracking-wider">At Risk</th>
-              <th className="px-6 py-3 text-center text-xs font-semibold text-gray-500 uppercase tracking-wider">Delayed</th>
-              <th className="px-6 py-3 text-center text-xs font-semibold text-gray-500 uppercase tracking-wider">Delivered</th>
-              <th className="px-6 py-3 text-center text-xs font-semibold text-gray-500 uppercase tracking-wider">Pending</th>
-              <th className="px-6 py-3 text-center text-xs font-semibold text-gray-500 uppercase tracking-wider">Total</th>
+              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Ring</th>
+              <th className="px-4 py-3 text-center text-xs font-semibold text-gray-500 uppercase tracking-wider">Plan FDT</th>
+              <th className="px-4 py-3 text-center text-xs font-semibold text-gray-500 uppercase tracking-wider">Pending FDT</th>
+              <th className="px-4 py-3 text-center text-xs font-semibold text-gray-500 uppercase tracking-wider">Delivered</th>
+              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Planned Delivery</th>
+              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Actual Start</th>
+              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Actual Finish</th>
+              <th className="px-4 py-3 text-center text-xs font-semibold text-gray-500 uppercase tracking-wider">Duration</th>
+              <th className="px-4 py-3 text-center text-xs font-semibold text-gray-500 uppercase tracking-wider">Gap</th>
+              <th className="px-4 py-3 text-center text-xs font-semibold text-gray-500 uppercase tracking-wider">Status</th>
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {data.categories.map((category, index) => {
-              const atRisk = atRiskData[index];
-              const delayed = delayedData[index];
-              const delivered = deliveredData[index];
-              const pending = pendingData[index];
-              const total = atRisk + delayed + delivered + pending;
-
-              return (
-                <tr key={category} className="hover:bg-gray-50 transition-colors">
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{category}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-center">
-                    {atRisk > 0 ? (
-                      <span className="bg-red-100 text-red-800 px-2 py-1 rounded-full font-medium">{atRisk}</span>
-                    ) : (
-                      <span className="text-gray-300">-</span>
-                    )}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-center">
-                    {delayed > 0 ? (
-                      <span className="bg-orange-100 text-orange-800 px-2 py-1 rounded-full font-medium">{delayed}</span>
-                    ) : (
-                      <span className="text-gray-300">-</span>
-                    )}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-center">
-                    {delivered > 0 ? (
-                      <span className="bg-green-100 text-green-800 px-2 py-1 rounded-full font-medium">{delivered}</span>
-                    ) : (
-                      <span className="text-gray-300">-</span>
-                    )}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-center">
-                    {pending > 0 ? (
-                      <span className="bg-gray-200 text-gray-800 px-2 py-1 rounded-full font-medium">{pending}</span>
-                    ) : (
-                      <span className="text-gray-300">-</span>
-                    )}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-center font-bold text-gray-900">{total}</td>
-                </tr>
-              );
-            })}
-            
-            {/* Footer Row */}
-            <tr className="bg-gray-100">
-                <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-900">TOTAL</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-center font-bold text-red-600">{totalAtRisk}</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-center font-bold text-orange-600">{totalDelayed}</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-center font-bold text-green-600">{totalDelivered}</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-center font-bold text-gray-600">{totalPending}</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-center font-bold text-gray-900">{grandTotal}</td>
-            </tr>
+            {data.tableData.map((row, index) => (
+              <tr key={index} className="hover:bg-gray-50 transition-colors">
+                <td className="px-4 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{row.ring}</td>
+                <td className="px-4 py-4 whitespace-nowrap text-sm text-center text-blue-600 font-medium">{row.planFdt}</td>
+                <td className="px-4 py-4 whitespace-nowrap text-sm text-center text-orange-600">{row.pendingFdt}</td>
+                <td className="px-4 py-4 whitespace-nowrap text-sm text-center text-green-600">{row.deliveredFdt}</td>
+                <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-500">{row.plannedDelivery}</td>
+                <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-500">{row.actualStart}</td>
+                <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-500">{row.actualFinish}</td>
+                <td className="px-4 py-4 whitespace-nowrap text-sm text-center text-gray-900">{row.duration}</td>
+                <td className="px-4 py-4 whitespace-nowrap text-sm text-center text-gray-900">{row.gap}</td>
+                <td className="px-4 py-4 whitespace-nowrap text-sm text-center">
+                  <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusStyle(row.status)}`}>
+                    {row.status}
+                  </span>
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>
