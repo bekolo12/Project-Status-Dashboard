@@ -8,10 +8,10 @@ export const DASHBOARD_DATA: RawDashboardData = {
       "SMR R1", "SMR R2", "SMR R3", "TKT R1", "TKT R2", "TKT R3"
   ],
   series: [
-      { name: "At Risk", color: "#DC2626", data: [0, 0, 0, 0, 0, 8, 5, 0, 0, 0, 0, 0, 0] }, // Red-600
-      { name: "Delayed", color: "#EA580C", data: [0, 0, 0, 18, 13, 0, 0, 0, 0, 11, 0, 0, 0] }, // Orange-600
-      { name: "Delivered", color: "#16A34A", data: [15, 9, 13, 0, 0, 0, 0, 15, 16, 0, 15, 18, 0] }, // Green-600
-      { name: "Pending", color: "#4B5563", data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 11] } // Gray-600
+      { name: "At Risk", color: "#DC2626", data: [0, 0, 0, 0, 0, 8, 5, 0, 0, 0, 0, 0, 0] }, // SHT R4, SHT R5
+      { name: "Delayed", color: "#EA580C", data: [0, 0, 0, 18, 13, 0, 0, 0, 0, 11, 0, 0, 0] }, // SHT R2, SHT R3, SMR R3
+      { name: "Delivered", color: "#16A34A", data: [15, 18, 15, 0, 0, 0, 0, 15, 16, 0, 15, 18, 0] }, // BIJI R1, BIJI R2, SHT R1, SMR R1, SMR R2, TKT R1, TKT R2
+      { name: "Pending", color: "#4B5563", data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 11] } // TKT R3
   ]
 };
 
